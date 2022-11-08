@@ -17,11 +17,13 @@ jwt_middleware = JWTMiddleware(
     shareable_secret, request_property="token", algorithms=JWT_ALG
 )
 
+DEFAULT_PG_URL = 'postgresql://user:hackme@localhost/auth'
+POOL_SIZE = 10
 
-async def setup_pg(app: Application, args) -> PG:
+async def setup_pg(app: Application) -> PG:
     app["pg"] = PG()
     await app["pg"].init(
-        str(args.pg_url), min_size=args.pg_pool_min_size, max_size=args.pg_pool_max_size
+        DEFAULT_PG_URL, min_size=POOL_SIZE, max_size=POOL_SIZE
     )
     await app["pg"].fetchval("SELECT 1")
 
@@ -78,7 +80,7 @@ async def validate_handler(request):
 
 
 app = web.Application(middlewares=[jwt_middleware])
-app.cleanup_ctx.append(partial(setup_pg, args=args))
+app.cleanup_ctx.append(setup_pg)
 
 app.router.add_post("/login", login_handler)
 app.router.add_post("/validate", validate_handler)
