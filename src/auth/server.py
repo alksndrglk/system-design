@@ -17,7 +17,7 @@ jwt_middleware = JWTMiddleware(
     shareable_secret, request_property="token", algorithms=JWT_ALG
 )
 
-DEFAULT_PG_URL = 'postgresql://user:hackme@localhost/auth'
+DEFAULT_PG_URL = 'postgresql://auth_user:hackme@localhost/auth'
 POOL_SIZE = 10
 
 async def setup_pg(app: Application) -> PG:
