@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auth-configmap
+# here should be env vars
+# data:
+  #db_host: host.minikube.internal #(for localhost usage)
+  #db_pass
+  #e.x.
+

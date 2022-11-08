@@ -9,7 +9,7 @@ RUN /usr/share/python3/app/bin/pip install -Ur /mnt/requirements.txt
 FROM snakepacker/python:3.9 as api
 
 COPY --from=builder /usr/share/python3/app /usr/share/python3/app
-WORKDIR /app
+
+WORKDIR /src
 COPY . .
-EXPOSE 9000
-CMD ["python", "server.py"]
+CMD ["/usr/share/python3/app/bin/python3", "server.py"]

@@ -17,7 +17,7 @@ jwt_middleware = JWTMiddleware(
     shareable_secret, request_property="token", algorithms=JWT_ALG
 )
 
-DEFAULT_PG_URL = 'postgresql://auth_user:hackme@localhost/auth'
+DEFAULT_PG_URL = 'postgresql://auth_user:hackme@localhost:5432/auth'
 POOL_SIZE = 10
 
 async def setup_pg(app: Application) -> PG:
@@ -61,7 +61,7 @@ async def login_handler(request: web.Request):
         raise HTTPForbidden
 
     email, password = auth.login, auth.password
-    query = "SELECT email, password FROM auth WHERE email = %s", (email,)
+    query = "SELECT email, password FROM auth_users WHERE email = %s", (email,)
     res = await request.app["pg"].fetchrow(query)
     if not res:
         raise HTTPForbidden(reason="invalid email")
