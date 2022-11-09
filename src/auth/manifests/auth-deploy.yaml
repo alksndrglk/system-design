@@ -23,8 +23,8 @@ spec:
           image: alksglk/auth
           ports:
             - containerPort: 9000
-          #envFrom:
-            #- configMapRef:
-                #name: auth-configmap
-            #- secretRef:
-                #name: auth-sercet
+          envFrom:
+            - configMapRef:
+                name: auth-configmap
+            - secretRef:
+                name: auth-sercet

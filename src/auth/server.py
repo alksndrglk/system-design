@@ -1,4 +1,5 @@
 import jwt
+import os
 import datetime
 from hashlib import sha256
 from functools import partial
@@ -10,20 +11,26 @@ from aiohttp.web_app import Application
 from asyncpgsa import PG
 from aiohttp_jwt import JWTMiddleware, login_required
 
-shareable_secret = "secret"
-JWT_ALG = "HS256"
+JWT_SECRET = os.getenv("JWT_SERCET")  # "secret"
+JWT_ALG = os.getenv("JWT_ALG")  # "HS256"
+DB_HOST = os.getenv("DB_HOST")
+DB_USER = os.getenv("DB_USER")
+DB_PASS = os.getenv("DB_PASS")
+DB_PORT = os.getenv("DB_PORT")
+DB_NAME = os.getenv("DB_NAME")
 
-jwt_middleware = JWTMiddleware(
-    shareable_secret, request_property="token", algorithms=JWT_ALG
-)
+jwt_middleware = JWTMiddleware(JWT_SECRET, request_property="token", algorithms=JWT_ALG)
 
-DEFAULT_PG_URL = 'postgresql://auth_user:hackme@localhost:5432/auth'
+DEFAULT_PG_URL = "postgresql://{}:{}@{}:{}/{}"
 POOL_SIZE = 10
+
 
 async def setup_pg(app: Application) -> PG:
     app["pg"] = PG()
     await app["pg"].init(
-        DEFAULT_PG_URL, min_size=POOL_SIZE, max_size=POOL_SIZE
+        DEFAULT_PG_URL.format(DB_USER, DB_PASS, DB_HOST, DB_PORT, DB_NAME),
+        min_size=POOL_SIZE,
+        max_size=POOL_SIZE,
     )
     await app["pg"].fetchval("SELECT 1")
 
@@ -71,7 +78,7 @@ async def login_handler(request: web.Request):
     if not is_password_valid(query_password, password):
         raise HTTPForbidden(reason="invalid password")
 
-    return web.json_response(create_jwt(query_email, shareable_secret, True))
+    return web.json_response(create_jwt(query_email, JWT_SECRET, True))
 
 
 @login_required
