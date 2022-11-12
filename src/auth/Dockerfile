@@ -12,4 +12,5 @@ COPY --from=builder /usr/share/python3/app /usr/share/python3/app
 
 WORKDIR /src
 COPY . .
+EXPOSE 9000
 CMD ["/usr/share/python3/app/bin/python3", "server.py"]

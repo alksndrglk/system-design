@@ -20,11 +20,11 @@ spec:
     spec:
       containers:
         - name: auth
-          image: alksglk/auth
+          image: alksglk/auth:latest
           ports:
             - containerPort: 9000
           envFrom:
             - configMapRef:
                 name: auth-configmap
             - secretRef:
-                name: auth-sercet
+                name: auth-secret

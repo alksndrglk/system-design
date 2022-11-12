@@ -11,7 +11,7 @@ from aiohttp.web_app import Application
 from asyncpgsa import PG
 from aiohttp_jwt import JWTMiddleware, login_required
 
-JWT_SECRET = os.getenv("JWT_SERCET")  # "secret"
+JWT_SECRET = os.getenv("JWT_SECRET")  # "secret"
 JWT_ALG = os.getenv("JWT_ALG")  # "HS256"
 DB_HOST = os.getenv("DB_HOST")
 DB_USER = os.getenv("DB_USER")
